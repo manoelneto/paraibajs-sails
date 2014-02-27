@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+
+<!--
+  Google HTML5 slide template
+
+  Authors: Luke Mahé (code)
+           Marcin Wichary (code and design)
+           
+           Dominic Mazzoni (browser compatibility)
+           Charles Chen (ChromeVox support)
+
+  URL: http://code.google.com/p/html5slides/
+-->
+
+<html>
+  <head>
+    <title>Presentation</title>
+
+    <meta charset='utf-8'>
+    <script
+      src='http://html5slides.googlecode.com/svn/trunk/slides.js'></script>
+  </head>
+  
+  <style>
+    /* Your individual styles here, or just use inline styles if that’s
+       what you want. */
+    
+    .biglogo {
+      background-image: url('images/google-logo.png') !important;
+    }
+
+    .slides.template-default > article:not(.nobackground):not(.biglogo) {
+      background: url(images/google-logo-small.png) 750px 565px no-repeat !important;
+      background-color: white !important;
+    }
+    
+  </style>
+
+  <body style='display: none'>
+
+    <section class='slides layout-regular template-default'>
+      
+      <!-- Your slides (<article>s) go here. Delete or comment out the
+           slides below. -->
+        
+        
+      
+      <article class='biglogo'>
+
+      </article>
+
+      <article>
+        <h1>
+          Criando uma webapp com Sails.js
+        </h1>
+        <p>
+          Manoel Quirino Neto
+          <br>
+          Segundo Meetup paraiba.js
+        </p>
+      </article>
+      
+      <article>
+        <h3>
+          Quem sou?
+        </h3>
+
+        <p>
+          Front-End na <a href="http://sodavirtu.al" target="blank">Soda virtual</a>.
+        </p>
+        <p>
+          GitHub /<a href="https://github.com/manoelneto" target="_blank">manoelneto</a>
+        </p>
+        <p>
+          Twitter @<a href="https://twitter.com/manoel_n" target="_blank">manoel_n</a>
+        </p>
+      </article>
+      
+      <!--
+      <article>
+        <h3>Conteúdo</h3>
+
+        <ul>
+          <li>Introdução</li>
+          <li>Workflow</li>
+          <li>Porque migrar do grunt para o gulp?</li>
+          <li>Grunt</li>
+          <li>Gulp</li>
+          <li>Diferenças do grunt e gulp</li>
+          <li>
+            Montando um <i>Gruntfile</i> e um <i>Gulpfile</i>
+          </li>
+          <li>Conclusão</li>
+        </ul>
+      </article> -->
+
+      <article>
+        <h3>Sails.js</h3>
+
+        <p>É um framework MVC escrito em cima do express.js bem parecido com o rails.</p>
+        <p>Utilizar waterline</p>
+        <p>Restfull</p>
+        <p>Socket.io</p>
+        <p>Perfeito para quem quer criar uma api rapida de teste.</p>
+
+      </article>
+
+      <article>
+        <h3>Instalação</h3>
+
+        <pre>sudo npm -g install sails</pre>
+
+      </article>
+
+      <article>
+        <h3>Scaffolding</h3>
+
+        <pre>sails new sailsparaibajs
+cd sailsparaibajs
+sails lift</pre>
+
+      </article>
+
+      <article>
+        <h2>
+          Estrutura
+        </h2>
+      </article>
+
+      <article>
+        <h3>
+          Criando um CRUD
+        </h3>
+
+<p>
+  primeiro vamos criar um modelo e o controller de Person 
+</p>
+<pre>
+sails generate Person
+</pre>
+
+
+      </article>
+
+      <article class="fill">
+        <img src="images/e-so.jpg" alt="">
+      </article>
+
+      <article>
+        <h3>CRUD</h3>
+
+
+        <p>Create</p>
+
+<pre>
+  POST http://127.0.0.1:1337/person
+  {
+      "name": "Manoel",
+      "idade": "21",
+      "sexo": "masculino"
+  }
+</pre>
+
+      </article>
+
+      <article>
+        <h3>CRUD</h3>
+
+        <p>Retrieve</p>
+
+<pre>
+  GET http://127.0.0.1:1337/person
+  GET http://127.0.0.1:1337/person/1
+</pre>
+
+      </article>
+
+
+      <article>
+        <h3>CRUD</h3>
+
+        <p>Update</p>
+
+<pre>
+  PUT http://127.0.0.1:1337/person/1
+  {
+      "cargo": "Desenvolvedor Web",
+      "idade": "22"
+  }
+</pre>
+
+      </article>
+
+      <article>
+        <h3>CRUD</h3>
+
+        <p>Delete</p>
+
+<pre>
+  DELETE http://127.0.0.1:1337/person/1
+</pre>
+
+      </article>
+      
+
+      <article>
+        <h3>Sails.js</h3>
+
+        <p>Agora que vimos o CRUD, vamos ver o MVC</p>
+
+      </article>
+
+
+      <article class="smaller">
+        <h3>Models</h3>
+
+        <p>api/models/</p>
+
+        <p>Ex: api/models/Cerveja.js</p>
+<pre>
+  module.exports = {
+    attributes: {
+      name: {
+        type: 'string',
+        required: true
+      },
+
+      category: {
+        type: 'string',
+        defaultsTo: 'sem categoria'
+      },
+
+      price : {
+        type: 'integer',
+        max: 100
+      }
+    }
+  }
+</pre>
+<p>Veja que você pode setar validadores nos atributos, como também um <br> valor default caso o campo não for enviado.</p>
+
+      </article>
+
+<article>
+        <h3>Controller</h3>
+
+        <p>api/controllers/</p>
+
+        <p>Ex: api/controller/CervejaController.js</p>
+<pre>
+  module.exports = {
+  }
+</pre>
+
+<p>Para a api RESTFull funcionar, é necessário criar um arquivo com o mesmo nome do modelo, seguido de Controller.js.</p>
+
+      </article>
+
+<article class="smaller">
+        <h3>View</h3>
+
+        <p>views/NOME_DO_CONTROLLER_SEM_CONTROLLER_E_MINUSCULO/FILE.ejs</p>
+
+        <p>Ex: views/cerveja/listagem.ejs</p>
+<pre>
+  Listagem de cervejas
+
+  &lt;ul&gt;<br/>  &lt;% _.each(cervejas, function(cerveja){ %&gt;<br/>      &lt;li&gt;<br/>          &lt;p&gt;Nome: &lt;%= cerveja.name %&gt;&lt;/p&gt;<br/>          &lt;% if (cerveja.price) { %&gt; <br/>              &lt;p&gt;Pre&ccedil;o: &lt;%= cerveja.price %&gt;&lt;/p&gt;<br/>          &lt;% } %&gt;<br/>          &lt;p&gt;Categoria: &lt;%= cerveja.category %&gt;&lt;/p&gt;<br/>      &lt;/li&gt;<br/>  &lt;% }) %&gt;<br/>  &lt;/ul&gt;
+</pre>
+
+        <p>E rota customizável?</p>
+
+      </article>
+
+<article class="smaller">
+        <h3>Rotas</h3>
+
+        <p>config/routes.js</p>
+
+        <p>Ex: views/cerveja/listagem.ejs</p>
+<pre>
+  '/listagem' : {
+    controller : 'CervejaController',
+    action : 'listagem'
+  }
+
+  '/': {
+    view: 'user/signup'
+  },
+
+  'post /': 'UserController.createUser',
+  
+  '/': 'MessageController.inbox',
+</pre>
+
+      </article>
+
+<article class="smaller">
+        <h3>Rotas</h3>
+
+        <p>config.controllers.blueprints.actions = true</p>
+
+        <p>Rota dinamicamente ligada as controllers</p>
+<pre>
+  `CervejaController.index`
+  :::::::::::::::::::::::::::::::::::::::::::::::::::::::
+  `GET     /cerveja/:id?`        `GET    /cerveja/index/:id?`           
+  `POST    /cerveja/:id?`        `POST   /cerveja/index/:id?`
+  `PUT     /cerveja/:id?`        `PUT    /cerveja/index/:id?`
+  `DELETE  /cerveja/:id?`        `DELETE /cerveja/index/:id?
+
+  `CervejaController.show`
+  :::::::::::::::::::::::::::::::::::::::::::::::::::::::
+  `GET    /cerveja/show/:id?`           
+  `POST   /cerveja/show/:id?`
+  `PUT    /cerveja/show/:id?`
+  `DELETE /cerveja/show/:id?
+</pre>
+
+      </article>
+
+<article>
+        <h3>Controller</h3>
+
+        <p>Mesmo arquivo api/controller/CervejaController.js</p>
+<pre>
+  module.exports = {
+      listagem : function(req, res) {
+          Cerveja.find().done(function(err, cervejas){
+              if (err) {
+                  res.view({message: 'Deu erro, oh =x'});
+              }
+              return res.view({cervejas: cervejas});
+          });
+      }
+  }
+</pre>
+
+      </article>
+
+
+<article>
+  <h3>MAAAAASSS ... !!!</h3>
+
+  <p>Por padrão, tudo pode ser acessado sem autenticação.</p>
+
+  <p>Mas a vida, é uma caixinha de surpresas e numa bela manhã de sol, seu chefe diz: bota uma senha pra acessar isso daqui ...</p>
+
+  <p>E agora?</p>
+
+</article>
+
+<article class="smaller">
+  <h3>Autenticação / Policies</h3>
+
+  <p>config/policies</p>
+
+  <p>Uma middleware para suas views. Só chega na view se você quiser!!!!!</p>
+
+  <p>Policies ficam no diretório api/pollicies</p>
+
+<pre>
+  # config/policies.js
+  # A action listagem do controller CervejaController vai passar pela middleware soManoel
+  CervejaController : {
+    listagem : 'soManoel'
+  }
+</pre>
+
+<pre>
+  # api/policies/soManoel
+  var url = require('url');
+  module.exports = function(req, res, next) {
+      var url_parts = url.parse(req.url, true);
+      var query = url_parts.query;
+      if ( query.usuario !== 'manoel' ) {
+            return res.forbidden('Você não é Manoel. Se manda.');
+      }
+      next();
+  }
+</pre>
+</article>
+
+<article class="smaller">
+  <h3>Socket</h3>
+
+  <p>Socket.io por padrão</p>
+
+  <p>Cada ação no model (CRUD) é mandado uma messagem aos sockets connectados</p>
+
+<pre>
+  var socket = io.connect();
+  angular.module('cerveja', [])
+      .controller('CervejaController', function($scope){
+          $scope.msg = 'carregando as cervejas';
+          socket.on('connect', function(){
+              socket.get('/cerveja', function(cervejas){
+                  $scope.msg = 'Cervejas carregadas';
+                  $scope.cervejas = cervejas;
+                  $scope.$apply();
+              });
+              socket.on('message', function(message){
+                  if ( message.model == 'cerveja' ) {
+                      if ( message.verb == 'create' ) {
+                          $scope.msg = 'Cervejas adicionada';
+                          $scope.cervejas.push(message.data);
+                          $scope.$apply();
+                      }
+                  }
+              });
+          });
+      });
+</pre>
+
+
+</article>
+
+<article>
+  <h2>Mas você pode também mandar seus eventos.</h2>
+  
+  <script type="text/javascript" src="http://127.0.0.1:1338/js/socket.io.js"></script>
+  
+  <!-- then beef it up with some convenience logic for talking to Sails.js -->
+  <script type="text/javascript" src="http://127.0.0.1:1338/js/sails.io.js"></script>
+
+  <canvas id="canvas" width="766" height="800"></canvas>
+
+  <script>
+      
+      var socket = io.connect('http://127.0.0.1:1338/');
+
+      socket.on('connect', function(){
+          var canvas = document.getElementById('canvas');
+          var ctx = canvas.getContext('2d');
+          var color = 'black';
+          var radius = 5;
+
+          function draw(opt) {
+              var x = opt.x;
+              var y = opt.y;
+
+              ctx.beginPath();
+              ctx.arc(x, y, radius, 0, 2 * Math.PI, false);
+              ctx.fillStyle = color;
+              ctx.fill();
+
+              // ctx.lineWidth = 5;
+              // ctx.strokeStyle = '#003300';
+              // ctx.stroke();
+              // ctx.endPath();
+
+          }
+
+          function clean () {
+              ctx.clearRect(0, 0, canvas.width, canvas.height);
+          }
+
+          socket.on('draw', function(data){
+              draw(data);
+          });
+
+          socket.on('clean', function(data){
+              clean();
+          });
+
+          socket.on('change_color', function(data){
+              color = data.color;
+          });
+
+          socket.on('next_slide', function(data){
+            nextSlide();
+          });
+
+          socket.on('prev_slide', function(data){
+            prevSlide();
+          });
+
+      })
+  </script>
+
+</article>
+
+    <article class="fill">
+      <h3>Página oficial do sails.js (http://sailsjs.org/)</h3>
+      <img src="images/sailsjs.png" alt="">
+    </article>
+
+    <article class="fill">
+      <h3>Página oficial do express.js (http://expressjs.com/)</h3>
+      <img src="images/express.png" alt="">
+    </article>
+
+    <article class="fill">
+      <h3>Página oficial do Socket.io (http://socket.io/)</h3>
+      <img src="images/socketio.png" alt="">
+    </article>
+
+    <article class="fill">
+      <h3>Github Waterline (https://github.com/balderdashy/waterline)</h3>
+      <img src="images/waterline.png" alt="">
+    </article>
+
+    <article>
+      <h1>Obrigado =]</h1>
+    </article>
+
+    </section>
+
+  </body>
+</html>

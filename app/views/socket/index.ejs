@@ -1,0 +1,47 @@
+<p>Socket index</p>
+<canvas id="canvas" width="766" height="800"></canvas>
+
+<script>
+    
+    var socket = io.connect();
+
+    socket.on('connect', function(){
+        var canvas = document.getElementById('canvas');
+        var ctx = canvas.getContext('2d');
+        var color = 'black';
+        var radius = 5;
+
+        function draw(opt) {
+            var x = opt.x;
+            var y = opt.y;
+
+            ctx.beginPath();
+            ctx.arc(x, y, radius, 0, 2 * Math.PI, false);
+            ctx.fillStyle = color;
+            ctx.fill();
+
+            // ctx.lineWidth = 5;
+            // ctx.strokeStyle = '#003300';
+            // ctx.stroke();
+            // ctx.endPath();
+
+        }
+
+        function clean () {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        socket.on('draw', function(data){
+            draw(data);
+        });
+
+        socket.on('clean', function(data){
+            clean();
+        });
+
+        socket.on('change_color', function(data){
+            color = data.color;
+        });
+
+    })
+</script>

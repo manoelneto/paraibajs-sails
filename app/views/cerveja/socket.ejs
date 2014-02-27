@@ -1,0 +1,54 @@
+<script type="text/javascript" src="/components/angular/angular.min.js"></script>
+
+<p>Listagem de cervejas assincrona</p>
+
+<div data-ng-app="cerveja">
+    <div data-ng-controller="CervejaController">
+        <div>{{ msg }}</div>
+
+        <ul>
+            <li data-ng-repeat="cerveja in cervejas">
+                <span>Nome: {{ cerveja.name }}</span> |
+                <span>Preço:  {{ cerveja.price }}</span> |
+                <span>Categoria:  {{ cerveja.category }}</span>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<style>
+    li span{
+        width: 200px;
+        display: inline-block;
+    }
+</style>
+
+
+<script>
+    var socket = io.connect();
+
+    angular.module('cerveja', [])
+        .controller('CervejaController', function($scope){
+
+            $scope.msg = 'carregando as cervejas';
+
+            socket.on('connect', function(){
+
+                socket.get('/cerveja', function(cervejas){
+                    $scope.msg = 'Cervejas carregadas';
+                    $scope.cervejas = cervejas;
+                    $scope.$apply();
+                });
+
+                socket.on('message', function(message){
+                    if ( message.model == 'cerveja' ) {
+                        if ( message.verb == 'create' ) {
+                            $scope.msg = 'Cervejas adicionada';
+                            $scope.cervejas.push(message.data);
+                            $scope.$apply();
+                        }
+                    }
+                });
+            });
+        });
+</script>

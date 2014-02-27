@@ -1,0 +1,2 @@
+# paraibajs
+### a Sails application

@@ -1,0 +1,115 @@
+<canvas id="canvas" width="766" height="800"></canvas>
+<div>
+    <button id="vermelho">Vermelho</button>
+    <button id="preto">preto</button>
+    <button id="limpar">limpar</button>
+</div>
+<div>
+    <button id="prev">prev</button>
+    <button id="next">next</button>
+</div>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+}
+    
+    button {
+        display: inline-block;
+        width: 200px;
+        height: 100px;
+    }
+
+    canvas {
+        border: 1px solid black;
+    }
+</style>
+
+<script>
+    
+    var socket = io.connect();
+
+    socket.on('connect', function(){
+        var canvas = document.getElementById('canvas');
+        var vermelho = document.getElementById('vermelho');
+        var preto = document.getElementById('preto');
+        var limpar = document.getElementById('limpar');
+        var next = document.getElementById('next');
+        var prev = document.getElementById('prev');
+        var ctx = canvas.getContext('2d');
+        var color = 'black';
+        var radius = 5;
+
+        canvas.addEventListener('touchmove', touchmove, false);
+
+        vermelho.addEventListener('touchstart', function(){
+            changeColor('red');
+        }, false);
+
+        next.addEventListener('touchstart', function(e){
+            e.preventDefault();
+            socket.post('/socket/drawsocket/next_slide');
+        }, false);
+
+        prev.addEventListener('touchstart', function(e){
+            e.preventDefault();
+            socket.post('/socket/drawsocket/prev_slide');
+        }, false);
+
+        preto.addEventListener('touchstart', function(){
+            changeColor('black');
+        }, false);
+
+        limpar.addEventListener('touchstart', function(){
+            clean();
+        }, false);
+
+        function clean () {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            socket.post('/socket/drawsocket/clean');
+        }
+
+        function changeColor (newColor) {
+            color = newColor;
+
+            var data = {
+                color : color
+            };
+
+            socket.post('/socket/drawsocket/change_color', data);
+        }
+
+        function draw(opt) {
+            var x = opt.x;
+            var y = opt.y;
+
+            ctx.beginPath();
+            ctx.arc(x, y, radius, 0, 2 * Math.PI, false);
+            ctx.fillStyle = color;
+            ctx.fill();
+
+            // ctx.lineWidth = 5;
+            // ctx.strokeStyle = '#003300';
+            // ctx.stroke();
+            // ctx.endPath();
+
+        }
+
+        function touchmove (e) {
+            e.preventDefault();
+
+            var data = {
+                x : e.layerX,
+                y : e.layerY,
+            };
+
+            draw(data);
+
+            socket.post('/socket/drawsocket/draw', data);
+        }
+    })
+
+
+</script>

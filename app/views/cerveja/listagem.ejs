@@ -1,0 +1,13 @@
+Listagem de cervejas
+
+  <ul>
+  <% _.each(cervejas, function(cerveja){ %>
+      <li>
+          <p>Nome: <%= cerveja.name %></p>
+          <% if (cerveja.price) { %> 
+              <p>Preço: <%= cerveja.price %></p>
+          <% } %>
+          <p>Categoria: <%= cerveja.category %></p>
+      </li>
+  <% }) %>
+  </ul>
